@@ -7,20 +7,40 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource()]
+
+#[ApiResource(
+
+    collectionOperations: [
+        'get'=>[
+            'normalization_context'=> ['groups'=>[ 'read:featuresLabel:collection' ]]
+        ],
+        'post'
+    ],
+    itemOperations: [
+        'put',
+        'delete',
+        'get',
+    ],
+
+    normalizationContext: ['groups' => 'activity:read', 'features:read', 'featuresLabel:read'],
+)]
 #[ORM\Entity(repositoryClass: FeaturesLabelRepository::class)]
 class FeaturesLabel
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["activity:read", "features:read", "featuresLabel:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["activity:read", "features:read", "featuresLabel:read"])]
     private ?string $label = null;
 
     #[ORM\OneToMany(mappedBy: 'features_label', targetEntity: Features::class)]
+    #[Groups(["activity:read", "features:read", "featuresLabel:read"])]
     private Collection $features;
 
     public function __construct()

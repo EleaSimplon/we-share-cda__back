@@ -86,7 +86,7 @@ class Activity
     #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
     private ?int $price = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 700)]
     #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
     private ?string $description = null;
 

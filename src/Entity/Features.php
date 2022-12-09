@@ -7,22 +7,40 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource()]
+#[ApiResource(
+
+    collectionOperations: [
+        'get'=>[
+            'normalization_context'=> ['groups'=>[ 'read:features:collection' ]]
+        ],
+        'post'
+    ],
+    itemOperations: [
+        'put',
+        'delete',
+        'get',
+    ],
+
+    normalizationContext: ['groups' => 'activity:read', 'features:read'],
+)]
 #[ORM\Entity(repositoryClass: FeaturesRepository::class)]
 class Features
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["activity:write"])]
+    #[Groups(["activity:write", "features:read", "read:features:collection"])]
     private ?int $id = null;
 
+    #[Groups(["activity:read", "features:read", "read:features:collection"])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $value = null;
 
+    #[Groups(["activity:read", "features:read", "read:features:collection"])]
     #[ORM\ManyToOne(inversedBy: 'features')]
     private ?Activity $activity = null;
 
+    #[Groups(["activity:read", "features:read", "read:features:collection"])]
     #[ORM\ManyToOne(inversedBy: 'featuresBis')]
     private ?FeaturesLabel $features_label = null;
 
