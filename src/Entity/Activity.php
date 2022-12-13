@@ -8,7 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\ActivityImageController;
 use Symfony\Component\Serializer\Annotation\Groups;
+
+// For the image
+
 
 #[ApiResource(
 
@@ -24,6 +28,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'put',
         'delete',
         'get',
+        'image' => [
+            'method' => 'POST',
+            'path' => '/activities/{id}/image',
+            'deserialize' => false,
+            'validate'=>false,
+            'controller' => ActivityImageController::class
+        ]
     ],
 
     normalizationContext: ['groups' => 'activity:read'],
@@ -364,4 +375,5 @@ class Activity
     {
         return $this->name;
     }
+
 }

@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get',
     ],
 
-    normalizationContext: ['groups' => 'activity:read', 'features:read', 'featuresLabel:read'],
+    normalizationContext: ['groups' => 'activity:read', 'featuresLabel:read'],
 )]
 #[ORM\Entity(repositoryClass: FeaturesLabelRepository::class)]
 class FeaturesLabel
@@ -32,15 +32,15 @@ class FeaturesLabel
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["activity:read", "features:read", "featuresLabel:read"])]
+    #[Groups(["activity:read", "read:features:collection","featuresLabel:read", "read:featuresLabel:collection"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["activity:read", "features:read", "featuresLabel:read"])]
+    #[Groups(["activity:read", "read:features:collection", "featuresLabel:read", "read:featuresLabel:collection"])]
     private ?string $label = null;
 
     #[ORM\OneToMany(mappedBy: 'features_label', targetEntity: Features::class)]
-    #[Groups(["activity:read", "features:read", "featuresLabel:read"])]
+    #[Groups(["featuresLabel:read", "read:featuresLabel:collection"])]
     private Collection $features;
 
     public function __construct()

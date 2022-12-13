@@ -29,19 +29,19 @@ class Features
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["activity:write", "features:read", "read:features:collection"])]
+    #[Groups(["activity:read", "features:read", "read:features:collection"])]
     private ?int $id = null;
 
     #[Groups(["activity:read", "features:read", "read:features:collection"])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $value = null;
 
-    #[Groups(["activity:read", "features:read", "read:features:collection"])]
+    #[Groups(["features:read", "read:features:collection"])]
     #[ORM\ManyToOne(inversedBy: 'features')]
     private ?Activity $activity = null;
 
     #[Groups(["activity:read", "features:read", "read:features:collection"])]
-    #[ORM\ManyToOne(inversedBy: 'featuresBis')]
+    #[ORM\ManyToOne(inversedBy: 'features')]
     private ?FeaturesLabel $features_label = null;
 
     public function __construct()

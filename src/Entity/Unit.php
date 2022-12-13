@@ -26,11 +26,11 @@ class Unit
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["unit:read", "activity:read", "activity:write"])]
+    #[Groups(["unit:read", "activity:read", "activity:write", "read:activity:collection"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["unit:read", "activity:read", "activity:write"])]
+    #[Groups(["unit:read", "activity:read", "activity:write", "read:activity:collection"])]
     private ?string $type = null;
 
     public function getId(): ?int
