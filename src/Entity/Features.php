@@ -13,7 +13,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get'=>[
             'normalization_context'=> ['groups'=>[ 'read:features:collection' ]]
         ],
-        'post'
+        'post' =>[
+            'denormalization_context'=> ['groups'=>['feature:write']],
+        ],
     ],
     itemOperations: [
         'put',

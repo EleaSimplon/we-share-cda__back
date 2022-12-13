@@ -3,10 +3,10 @@
 
 namespace App\EventSubscriber;
 
-use ApiPlatform\Core\EventListener\EventPriorities;
+//use ApiPlatform\Core\EventListener\EventPriorities;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
+//use Symfony\Component\HttpKernel\KernelEvents;
 
 class UserEventSubscriber implements EventSubscriberInterface
 {

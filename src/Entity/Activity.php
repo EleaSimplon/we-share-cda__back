@@ -20,8 +20,85 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get'=>[
             'normalization_context'=> ['groups'=>[ 'read:activities:collection']]
         ],
-        'post' =>[
+        // 'post' =>[
+        //     'denormalization_context'=> ['groups'=>['activity:write']],
+        // ],
+        // Pour la doc API
+        'post'=>[
+            'method'=>'POST',
             'denormalization_context'=> ['groups'=>['activity:write']],
+            'controller'=> ActivityController::class,
+            'deserialize'=>false,
+            'validate'=>false,
+            'openapi_context' => [
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'picture' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                    'name' => [
+                                        'type' => 'string',
+                                        'format' => 'string',
+                                    ],
+                                    'company' => [
+                                        'type' => 'string',
+                                        'format' => 'string',
+                                    ],
+                                    'address' => [
+                                        'type' => 'string',
+                                        'format' => 'string',
+                                    ],
+                                    'schedule' => [
+                                        'type' => 'string',
+                                        'format' => 'string',
+                                    ],
+                                    'duration'=>[
+                                        'type' => 'integer',
+                                        'format' => 'integer',
+                                    ],
+                                    'unit'=>[
+                                        'type' => 'string',
+                                        'format' => 'string',
+                                    ],
+                                    'city'=>[
+                                        'type' => 'string',
+                                        'format' => 'string',
+                                    ],
+                                    'country'=>[
+                                        'type' => 'string',
+                                        'format' => 'string',
+                                    ],
+                                    'price'=>[
+                                        'type' => 'integer',
+                                        'format' => 'integer',
+                                    ],
+                                    'description'=>[
+                                        'type' => 'string',
+                                        'format' => 'string',
+                                    ],
+                                    'user'=>[
+                                        'type' => 'integer',
+                                        'format' => 'integer',
+                                    ],
+                                    'reviews'=>[
+                                        'type' => 'array',
+                                        'format' => 'array',
+                                    ],
+                                    'features'=>[
+                                        'type' => 'array',
+                                        'format' => 'array',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     itemOperations: [
@@ -45,64 +122,64 @@ class Activity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["user:read", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:read', 'review:read', 'read:activities:collection'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $phone_number = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $schedule = null;
 
     #[ORM\Column]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?int $duration = null;
 
     #[ORM\ManyToOne(cascade:["persist"])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?Unit $unit = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $country = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?\DateTimeInterface $published_at = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $picture = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?int $price = null;
 
     #[ORM\Column(length: 700)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["user:read", "activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $short_description = null;
 
     #[ORM\ManyToOne(inversedBy: 'activities')]
@@ -111,7 +188,7 @@ class Activity
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Review::class)]
-    #[Groups(["activity:write", "activity:read", "user:write", "user:read", 'read:activities:collection'])]
+    #[Groups(["user:write", "user:read", 'read:activities:collection'])]
     private Collection $reviews;
 
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Features::class)]

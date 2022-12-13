@@ -6,37 +6,66 @@ use App\Repository\ReviewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource()]
+
+
+#[ApiResource(
+
+    collectionOperations: [
+        'get'=>[
+            'normalization_context'=> ['groups'=>[ 'read:reviews:collection' ]]
+        ],
+        'post' =>[
+            'denormalization_context'=> ['groups'=>['review:write']],
+        ]
+    ],
+    itemOperations: [
+        'put',
+        'delete',
+        'get'
+    ],
+
+    normalizationContext: ['groups' => 'review:read'],
+
+)]
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
 class Review
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['review:write', 'read:reviews:collection'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['review:write', 'read:reviews:collection'])]
     private ?int $rate = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['review:write', 'read:reviews:collection'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 600)]
+    #[Groups(['review:write', 'read:reviews:collection'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['review:write', 'read:reviews:collection'])]
     private ?string $picture = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['review:write', 'read:reviews:collection'])]
     private ?\DateTimeInterface $posted_at = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade:["persist", "remove"])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['review:write', 'read:reviews:collection'])]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    #[ORM\ManyToOne(inversedBy: 'reviews', cascade:["persist"])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['review:write', 'read:reviews:collection'])]
     private ?Activity $activity = null;
 
     public function getId(): ?int
