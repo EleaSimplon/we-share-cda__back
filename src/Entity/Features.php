@@ -3,19 +3,23 @@
 namespace App\Entity;
 
 use App\Repository\FeaturesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+//use Doctrine\Common\Collections\ArrayCollection;
+
 
 #[ApiResource(
 
     collectionOperations: [
         'get'=>[
-            'normalization_context'=> ['groups'=>[ 'read:features:collection' ]]
+            'normalization_context'=> ['groups'=>[ 'read:features:collection', 'read:featuresLabel:collection' ]]
         ],
         'post' =>[
             'denormalization_context'=> ['groups'=>['feature:write']],
-        ],
+        ]
     ],
     itemOperations: [
         'put',
@@ -23,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get',
     ],
 
-    normalizationContext: ['groups' => 'activity:read', 'features:read'],
+    normalizationContext: ['groups' => 'activity:read', 'features:read', 'featuresLabel:read'],
 )]
 #[ORM\Entity(repositoryClass: FeaturesRepository::class)]
 class Features
@@ -31,23 +35,25 @@ class Features
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["activity:read", "features:read", "read:features:collection"])]
+    #[Groups(['activity:read', 'features:read', 'read:features:collection', 'featuresLabel:read', 'read:featuresLabel:collection'])]
     private ?int $id = null;
 
-    #[Groups(["activity:read", "features:read", "read:features:collection"])]
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $value = null;
-
-    #[Groups(["features:read", "read:features:collection"])]
+    #[Groups(['features:read', 'read:features:collection'])]
     #[ORM\ManyToOne(inversedBy: 'features')]
     private ?Activity $activity = null;
 
-    #[Groups(["activity:read", "features:read", "read:features:collection"])]
+    #[Groups(['activity:read', 'features:read'])]
     #[ORM\ManyToOne(inversedBy: 'features')]
     private ?FeaturesLabel $features_label = null;
 
+    #[ORM\ManyToOne(inversedBy: 'features')]
+    #[Groups(['activity:read', 'features:read'])]
+    private ?FeaturesValue $features_value = null;
+
+
     public function __construct()
     {
+        
     }
 
     public function getId(): ?int
@@ -55,17 +61,6 @@ class Features
         return $this->id;
     }
 
-    public function getValue(): ?string
-    {
-        return $this->value;
-    }
-
-    public function setValue(?string $value): self
-    {
-        $this->value = $value;
-
-        return $this;
-    }
 
     public function getActivity(): ?Activity
     {
@@ -95,6 +90,18 @@ class Features
     public function __toString()
     {
         return $this->id;
+    }
+
+    public function getFeaturesValue(): ?FeaturesValue
+    {
+        return $this->features_value;
+    }
+
+    public function setFeaturesValue(?FeaturesValue $features_value): self
+    {
+        $this->features_value = $features_value;
+
+        return $this;
     }
 
 }

@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Activity;
 use App\Entity\Features;
 use App\Entity\FeaturesLabel;
+use App\Entity\FeaturesValue;
 use App\Entity\Review;
 use App\Entity\User;
 
@@ -67,34 +68,24 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Show Reviews', 'fas fa-eye', Review::class)
         ]);
 
-        yield MenuItem::section('Labels', 'fa-solid fa-question');
+        yield MenuItem::section('features Labels', 'fa-solid fa-question');
         yield MenuItem::subMenu('Actions', 'fas fa-bars')->setSubItems([
             MenuItem::linkToCrud('Create Label', 'fas fa-plus', FeaturesLabel::class)->setAction(Crud::PAGE_NEW),
             MenuItem::linkToCrud('Show Label', 'fas fa-eye', FeaturesLabel::class)
         ]);
 
-        yield MenuItem::section('Labels Value', 'fa-solid fa-check');
+        yield MenuItem::section('Features Value', 'fa-solid fa-check');
         yield MenuItem::subMenu('Actions', 'fas fa-bars')->setSubItems([
-            MenuItem::linkToCrud('Create Label value', 'fas fa-plus', Features::class)->setAction(Crud::PAGE_NEW),
-            MenuItem::linkToCrud('Show Labels value', 'fas fa-eye', Features::class)
+            MenuItem::linkToCrud('Create Features value', 'fas fa-plus', FeaturesValue::class)->setAction(Crud::PAGE_NEW),
+            MenuItem::linkToCrud('Show Features value', 'fas fa-eye', FeaturesValue::class)
         ]);
 
-        
+        yield MenuItem::section('Features', 'fa-solid fa-check');
+        yield MenuItem::subMenu('Actions', 'fas fa-bars')->setSubItems([
+            MenuItem::linkToCrud('Create Features', 'fas fa-plus', Features::class)->setAction(Crud::PAGE_NEW),
+            MenuItem::linkToCrud('Show Features', 'fas fa-eye', Features::class)
+        ]);
+
     }
 
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
-
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirect('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
-        // return $this->render('some/path/my-dashboard.html.twig');
 }

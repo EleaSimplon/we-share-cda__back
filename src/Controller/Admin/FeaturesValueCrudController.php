@@ -2,27 +2,23 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Features;
+use App\Entity\FeaturesValue;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class FeaturesCrudController extends AbstractCrudController
+class FeaturesValueCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Features::class;
+        return FeaturesValue::class;
     }
-
     
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id')->hideOnForm(),
-            AssociationField::new('activity'),
-            AssociationField::new('features_label'),
-            AssociationField::new('features_value')
+            TextField::new('value'),
         ];
     }
-    
 }

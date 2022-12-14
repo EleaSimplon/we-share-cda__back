@@ -16,7 +16,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get'=>[
             'normalization_context'=> ['groups'=>[ 'read:featuresLabel:collection' ]]
         ],
-        'post'
+        'post' =>[
+            'denormalization_context'=> ['groups'=>['featuresLabel:write']],
+        ],
     ],
     itemOperations: [
         'put',
@@ -32,20 +34,20 @@ class FeaturesLabel
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["activity:read", "read:features:collection","featuresLabel:read", "read:featuresLabel:collection"])]
+    #[Groups(['activity:read','featuresLabel:read', 'read:featuresLabel:collection'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["activity:read", "read:features:collection", "featuresLabel:read", "read:featuresLabel:collection"])]
+    #[Groups(['activity:read', 'featuresLabel:read', 'read:featuresLabel:collection'])]
     private ?string $label = null;
 
     #[ORM\OneToMany(mappedBy: 'features_label', targetEntity: Features::class)]
-    #[Groups(["featuresLabel:read", "read:featuresLabel:collection"])]
+    #[Groups(['featuresLabel:read', 'read:featuresLabel:collection'])]
     private Collection $features;
 
     public function __construct()
     {
-        
+       $this->features = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -70,14 +72,14 @@ class FeaturesLabel
      */
     public function getFeatures(): Collection
     {
-        return $this->feature;
+        return $this->features;
     }
 
-    public function addFeatures(Features $features): self
+    public function addFeature(Features $feature): self
     {
-        if (!$this->features->contains($features)) {
-            $this->features->add($features);
-            $features->setFeaturesLabel($this);
+        if (!$this->features->contains($feature)) {
+            $this->features->add($feature);
+            //$feature->setActivity($this);
         }
 
         return $this;
