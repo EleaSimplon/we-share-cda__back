@@ -47,7 +47,7 @@ class Features
     private ?FeaturesLabel $features_label = null;
 
     #[ORM\ManyToOne(inversedBy: 'features')]
-    #[Groups(['activity:read', 'features:read'])]
+    #[Groups(['activity:read', 'features:read','featuresLabel:read', 'read:featuresLabel:collection'])]
     private ?FeaturesValue $features_value = null;
 
 

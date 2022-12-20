@@ -17,7 +17,9 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
     // Collection = Recup les listes
     // !! Collection + itemOpe = pour que ça soit visible dans la doc api !!
     collectionOperations: [
-        'get',
+        'get'=>[
+            'normalization_context'=> ['groups'=>[ 'read:users:collection', 'activity:read' ]]
+        ],
         'post',
         'me' => [
             'pagination_enabled' => false,
@@ -75,7 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'activity:read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Activity::class, orphanRemoval: true)]

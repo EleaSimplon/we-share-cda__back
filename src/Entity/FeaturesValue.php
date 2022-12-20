@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 
     collectionOperations: [
         'get'=>[
-            'normalization_context'=> ['groups'=>[ 'read:featuresValue:collection' ]]
+            'normalization_context'=> ['groups'=>[ 'read:featuresValue:collection', 'read:featuresLabel:collection' ]]
         ],
         'post' =>[
             'denormalization_context'=> ['groups'=>['featuresValue:write']],
@@ -36,20 +36,20 @@ class FeaturesValue
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['activity:read','featuresValue:read', 'read:featuresValue:collection'])]
+    #[Groups(['activity:read','featuresValue:read', 'read:featuresValue:collection', 'read:featuresLabel:collection'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['activity:read', 'featuresValue:read', 'read:featuresValue:collection'])]
+    #[Groups(['activity:read', 'featuresValue:read', 'read:featuresValue:collection', 'read:featuresLabel:collection'])]
     private ?string $value = null;
 
     #[ORM\OneToMany(mappedBy: 'features_value', targetEntity: Features::class)]
-    #[Groups(['featuresValue:read', 'read:featuresValue:collection'])]
+    #[Groups(['featuresValue:read'])]
     private Collection $features;
 
     public function __construct()
     {
-        $this->features = new ArrayCollection();
+        //$this->features = new ArrayCollection();
     }
 
     public function getId(): ?int

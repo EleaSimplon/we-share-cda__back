@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
     collectionOperations: [
         'get'=>[
-            'normalization_context'=> ['groups'=>[ 'read:reviews:collection' ]]
+            'normalization_context'=> ['groups'=>[ 'read:reviews:collection', 'activity:read' ]]
         ],
         'post' =>[
             'denormalization_context'=> ['groups'=>['review:write']],
@@ -35,37 +35,37 @@ class Review
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['review:write', 'read:reviews:collection'])]
+    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['review:write', 'read:reviews:collection'])]
+    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
     private ?int $rate = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['review:write', 'read:reviews:collection'])]
+    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 600)]
-    #[Groups(['review:write', 'read:reviews:collection'])]
+    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['review:write', 'read:reviews:collection'])]
+    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
     private ?string $picture = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['review:write', 'read:reviews:collection'])]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
     private ?\DateTimeInterface $posted_at = null;
 
     #[ORM\ManyToOne(cascade:["persist", "remove"])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['review:write', 'read:reviews:collection'])]
+    #[Groups(['review:read', 'review:write', 'read:reviews:collection', 'activity:read'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'reviews', cascade:["persist"])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['review:write', 'read:reviews:collection'])]
+    #[Groups(['review:read', 'read:reviews:collection'])]
     private ?Activity $activity = null;
 
     public function getId(): ?int

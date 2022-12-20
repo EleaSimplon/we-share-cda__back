@@ -18,87 +18,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
     collectionOperations: [
         'get'=>[
-            'normalization_context'=> ['groups'=>[ 'read:activities:collection']]
+            'normalization_context'=> ['groups'=>['read:activities:collection']]
         ],
         // 'post' =>[
         //     'denormalization_context'=> ['groups'=>['activity:write']],
         // ],
         // Pour la doc API
         'post'=>[
-            'method'=>'POST',
-            'denormalization_context'=> ['groups'=>['activity:write']],
-            'controller'=> ActivityController::class,
-            'deserialize'=>false,
-            'validate'=>false,
-            'openapi_context' => [
-                'requestBody' => [
-                    'content' => [
-                        'multipart/form-data' => [
-                            'schema' => [
-                                'type' => 'object',
-                                'properties' => [
-                                    'picture' => [
-                                        'type' => 'string',
-                                        'format' => 'binary',
-                                    ],
-                                    'name' => [
-                                        'type' => 'string',
-                                        'format' => 'string',
-                                    ],
-                                    'company' => [
-                                        'type' => 'string',
-                                        'format' => 'string',
-                                    ],
-                                    'address' => [
-                                        'type' => 'string',
-                                        'format' => 'string',
-                                    ],
-                                    'schedule' => [
-                                        'type' => 'string',
-                                        'format' => 'string',
-                                    ],
-                                    'duration'=>[
-                                        'type' => 'integer',
-                                        'format' => 'integer',
-                                    ],
-                                    'unit'=>[
-                                        'type' => 'string',
-                                        'format' => 'string',
-                                    ],
-                                    'city'=>[
-                                        'type' => 'string',
-                                        'format' => 'string',
-                                    ],
-                                    'country'=>[
-                                        'type' => 'string',
-                                        'format' => 'string',
-                                    ],
-                                    'price'=>[
-                                        'type' => 'integer',
-                                        'format' => 'integer',
-                                    ],
-                                    'description'=>[
-                                        'type' => 'string',
-                                        'format' => 'string',
-                                    ],
-                                    'user'=>[
-                                        'type' => 'integer',
-                                        'format' => 'integer',
-                                    ],
-                                    'reviews'=>[
-                                        'type' => 'array',
-                                        'format' => 'array',
-                                    ],
-                                    'features'=>[
-                                        'type' => 'array',
-                                        'format' => 'array',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
+            'denormalization_context'=> ['groups'=>['activity:write']]
         ],
     ],
     itemOperations: [
@@ -184,15 +111,15 @@ class Activity
 
     #[ORM\ManyToOne(inversedBy: 'activities')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["activity:write", "activity:read", 'read:activities:collection'])]
+    #[Groups(['activity:write', 'activity:read', 'read:activities:collection'])]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Review::class)]
-    #[Groups(["user:write", "user:read", 'read:activities:collection'])]
+    #[Groups(['user:write', 'user:read', 'activity:read', 'read:activities:collection'])]
     private Collection $reviews;
 
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Features::class)]
-    #[Groups(["activity:write", "activity:read",  'read:activities:collection'])]
+    #[Groups(['activity:write', 'activity:read',  'read:activities:collection'])]
     private Collection $features;
     
     public function __construct()
