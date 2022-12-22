@@ -38,7 +38,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'deserialize' => false,
             'validate'=>false,
             'controller' => ActivityImageController::class
-        ]
+        ],
+
+        // 'prepare'
+        /*  method post,
+            utilise un controller 
+            recuperer dans la requete les ids
+            Créer une methode dans le activityRepository qui recupere les activities cc.voir requete sql du patron
+            renvoyer les activities (return idiote !!!!!)
+         */
     ],
 
     normalizationContext: ['groups' => 'activity:read'],
