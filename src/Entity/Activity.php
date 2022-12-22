@@ -49,7 +49,7 @@ class Activity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'activity:read', 'review:read', 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:read', 'review:write', 'read:activities:collection'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

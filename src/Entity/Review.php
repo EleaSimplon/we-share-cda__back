@@ -6,6 +6,7 @@ use App\Repository\ReviewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 
@@ -35,27 +36,27 @@ class Review
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
+    #[Groups(['review:write','review:read', 'read:reviews:collection', 'activity:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
+    #[Groups(['review:write', 'review:read', 'read:reviews:collection', 'activity:read'])]
     private ?int $rate = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
+    #[Groups(['review:write', 'review:read', 'read:reviews:collection', 'activity:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 600)]
-    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
+    #[Groups(['review:write', 'review:read', 'read:reviews:collection', 'activity:read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
+    #[Groups(['review:write','review:read', 'read:reviews:collection', 'activity:read'])]
     private ?string $picture = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups(['review:write', 'read:reviews:collection', 'activity:read'])]
+    #[Groups(['review:write','review:read', 'read:reviews:collection', 'activity:read'])]
     private ?\DateTimeInterface $posted_at = null;
 
     #[ORM\ManyToOne(cascade:["persist", "remove"])]
@@ -65,9 +66,13 @@ class Review
 
     #[ORM\ManyToOne(inversedBy: 'reviews', cascade:["persist"])]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['review:read', 'read:reviews:collection'])]
+    #[Groups([ 'review:write', 'read:reviews:collection'])]
     private ?Activity $activity = null;
 
+    public function __construct()
+    {
+        $this->posted_at = new DateTime();
+    }
     public function getId(): ?int
     {
         return $this->id;

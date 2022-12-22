@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'review:read', 'activity:write'])]
+    #[Groups(['user:read', 'review:write', 'activity:write'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -77,7 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user:read', 'user:write', 'activity:read'])]
+    #[Groups(['user:read','review:read', 'user:write', 'activity:read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Activity::class, orphanRemoval: true)]
