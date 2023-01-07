@@ -77,7 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user:read','review:read', 'user:write', 'activity:read'])]
+    #[Groups(['user:read', 'review:read', 'user:write', 'activity:read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Activity::class, orphanRemoval: true)]
@@ -87,15 +87,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Review::class, orphanRemoval: true)]
     #[Groups(['user:read'])]
     private Collection $reviews;
-
     
     public function __construct()
     {
         $this->activities = new ArrayCollection();
         $this->reviews = new ArrayCollection();
-
     }
-
 
     public function getId(): ?int
     {

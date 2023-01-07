@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Activity;
+use App\Entity\FeaturesValue;
 use App\Form\ActivityType;
 use App\Repository\ActivityRepository;
+use App\Repository\FeaturesRepository;
+use App\Repository\FeaturesValueRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,4 +78,24 @@ class ActivityController extends AbstractController
 
         return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    #[Route('/prepare', name: 'prepare', methods: ['POST'])]
+    public function suggestActivity(Request $request, ActivityRepository $activityRepository, FeaturesValueRepository $featuresValueRepository): Response
+    {
+        $inputs = $request->toArray();
+        dd($inputs);
+        $activities = $featuresValueRepository->findBy(["id"=>$inputs]);
+        //$activitySuggest = $activityRepository->findSuggest($inputs);
+        foreach ($activities as $activity) {
+            dump($activity);
+        }
+        dd($activities);
+
+        $allActivities = $activityRepository->findAll();
+        //findSuggest($request);
+
+        //return ;
+    }
+
 }

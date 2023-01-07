@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\ActivityController;
 use App\Controller\ActivityImageController;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -25,8 +26,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
         // ],
         // Pour la doc API
         'post'=>[
+            'method' => 'POST',
+            'path' => '/prepare',
+            'controller' => [ActivityController::class, 'suggestActivity'],
             'denormalization_context'=> ['groups'=>['activity:write']]
+
+            
         ],
+        // 'prepare' => [
+        //     'method' => 'POST',
+        //     'path' => '/suggest_activity',
+        //     'controller' => [ActivityController::class, 'suggest_activity']
+        // ]
     ],
     itemOperations: [
         'put',
@@ -38,15 +49,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'deserialize' => false,
             'validate'=>false,
             'controller' => ActivityImageController::class
-        ],
+        ]
 
         // 'prepare'
         /*  method post,
-            utilise un controller 
+            utiliser un controller
             recuperer dans la requete les ids
             Créer une methode dans le activityRepository qui recupere les activities cc.voir requete sql du patron
             renvoyer les activities (return idiote !!!!!)
-         */
+        */
     ],
 
     normalizationContext: ['groups' => 'activity:read'],
@@ -123,7 +134,7 @@ class Activity
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Review::class)]
-    #[Groups(['user:write', 'user:read', 'activity:read', 'read:activities:collection'])]
+    #[Groups(['user:write', 'activity:read', 'read:activities:collection'])]
     private Collection $reviews;
 
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Features::class)]
