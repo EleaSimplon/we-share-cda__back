@@ -20,7 +20,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
     collectionOperations: [
         'get'=>[
             'normalization_context'=> ['groups'=>['read:activities:collection']]
+            
         ],
+        'average'=> [
+            'method' => 'GET',
+            'path'=> '/activities/{id}/average',
+            'controller' => [ActivityController::class, 'averageRate'],
+        ],
+        
         // 'post' =>[
         //     'denormalization_context'=> ['groups'=>['activity:write']],
         // ],
@@ -30,8 +37,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'path' => '/prepare',
             'controller' => [ActivityController::class, 'suggestActivity'],
             'denormalization_context'=> ['groups'=>['activity:write']]
-
-            
         ],
         // 'prepare' => [
         //     'method' => 'POST',

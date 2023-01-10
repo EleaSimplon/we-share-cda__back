@@ -8,7 +8,9 @@ use App\Form\ActivityType;
 use App\Repository\ActivityRepository;
 use App\Repository\FeaturesRepository;
 use App\Repository\FeaturesValueRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -96,6 +98,20 @@ class ActivityController extends AbstractController
         //findSuggest($request);
 
         //return ;
+    }
+
+    #[Route('/{id}/average', name: 'activity_average', methods: ['GET'])]
+    public function averageRate(Activity $activity): JsonResponse
+    {
+        $reviews = $activity->getReviews();
+        $total = 0;
+        $count = 0;
+        foreach ($reviews as $review) {
+            $total += $review->getRate();
+            $count++;
+        }
+        $average = $total/$count;
+        return new JsonResponse(['average' => $average],200);
     }
 
 }

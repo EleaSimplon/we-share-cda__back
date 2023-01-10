@@ -40,7 +40,7 @@ class Review
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['user:read', 'review:write', 'review:read', 'read:reviews:collection', 'activity:read'])]
+    #[Groups(['user:read', 'review:write', 'review:read', 'read:reviews:collection', 'activity:read', 'read:activities:collection'])]
     private ?int $rate = null;
 
     #[ORM\Column(length: 255)]
