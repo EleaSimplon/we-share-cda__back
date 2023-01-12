@@ -12,15 +12,17 @@ use App\Controller\ActivityController;
 use App\Controller\ActivityImageController;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-// For the image
-
-
 #[ApiResource(
 
     collectionOperations: [
         'get'=>[
             'normalization_context'=> ['groups'=>['read:activities:collection']]
             
+        ],
+        'prepare' => [
+            'method' => 'GET',
+            'path' => '/prepare',
+            'controller' => [ActivityController::class, 'suggestActivity'],
         ],
         'average'=> [
             'method' => 'GET',
@@ -31,10 +33,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'post'=>[
             'denormalization_context'=> ['groups'=>['activity:write']]
         ],
+        // 'prepare'
+        /*  method post,
+            utiliser un controller
+            recuperer dans la requete les ids
+            Créer une methode dans le activityRepository qui recupere les activities
+            renvoyer les activities
+        */
         'prepare' => [
             'method' => 'POST',
-                'path' => '/prepare',
-                'controller' => [ActivityController::class, 'suggestActivity'],
+            'path' => '/prepare',
+            'controller' => [ActivityController::class, 'suggestActivity'],
         ]
     ],
     itemOperations: [
@@ -48,19 +57,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'validate'=>false,
             'controller' => ActivityImageController::class
         ]
-
-        // 'prepare'
-        /*  method post,
-            utiliser un controller
-            recuperer dans la requete les ids
-            Créer une methode dans le activityRepository qui recupere les activities cc.voir requete sql du patron
-            renvoyer les activities (return idiote !!!!!)
-        */
-        // 'prepare' => [
-        //     'method' => 'POST',
-        //        'path' => '/prepare',
-        //        'controller' => [ActivityController::class, 'suggestActivity'],
-        // ]
     ],
 
     normalizationContext: ['groups' => 'activity:read'],

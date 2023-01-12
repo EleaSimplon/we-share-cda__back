@@ -3,37 +3,36 @@
 namespace App\Controller;
 
 use App\Entity\Activity;
-use App\Entity\FeaturesValue;
-use App\Form\ActivityType;
+//use App\Entity\FeaturesValue;
+//use App\Form\ActivityType;
 use App\Repository\ActivityRepository;
-use App\Repository\FeaturesRepository;
+//use App\Repository\FeaturesRepository;
 use App\Repository\FeaturesValueRepository;
-use Doctrine\Persistence\ManagerRegistry;
+//use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+//use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/activity')]
 class ActivityController extends AbstractController
 {
-    #[Route('/prepare', name: 'prepare', methods: ['POST'])]
+    #[Route('/prepare', name: 'prepare', methods: ['POST', 'GET'])]
     public function suggestActivity(Request $request, ActivityRepository $activityRepository, FeaturesValueRepository $featuresValueRepository): array
     {
         $inputs = $request->toArray();
         
         $activities = $featuresValueRepository->findBy(["id"=>$inputs]);
-        //$activitySuggest = $activityRepository->findSuggest($inputs);
+        
         foreach ($activities as $activity) {
             dump($activity);
         }
         
         $allActivities = $activityRepository->findSuggest($activities);
-        return $allActivities;
-        //findSuggest($request);
 
-        //return ;
+        return $allActivities;
+
     }
 
     #[Route('/{id}/average', name: 'activity_average', methods: ['GET'])]
