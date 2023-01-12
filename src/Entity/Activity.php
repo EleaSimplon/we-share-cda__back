@@ -27,22 +27,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'path'=> '/activities/{id}/average',
             'controller' => [ActivityController::class, 'averageRate'],
         ],
-        
-        // 'post' =>[
-        //     'denormalization_context'=> ['groups'=>['activity:write']],
-        // ],
         // Pour la doc API
         'post'=>[
-            'method' => 'POST',
-            'path' => '/prepare',
-            'controller' => [ActivityController::class, 'suggestActivity'],
             'denormalization_context'=> ['groups'=>['activity:write']]
         ],
-        // 'prepare' => [
-        //     'method' => 'POST',
-        //     'path' => '/suggest_activity',
-        //     'controller' => [ActivityController::class, 'suggest_activity']
-        // ]
+        'prepare' => [
+            'method' => 'POST',
+                'path' => '/prepare',
+                'controller' => [ActivityController::class, 'suggestActivity'],
+        ]
     ],
     itemOperations: [
         'put',
@@ -63,6 +56,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
             Créer une methode dans le activityRepository qui recupere les activities cc.voir requete sql du patron
             renvoyer les activities (return idiote !!!!!)
         */
+        // 'prepare' => [
+        //     'method' => 'POST',
+        //        'path' => '/prepare',
+        //        'controller' => [ActivityController::class, 'suggestActivity'],
+        // ]
     ],
 
     normalizationContext: ['groups' => 'activity:read'],

@@ -18,83 +18,19 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/activity')]
 class ActivityController extends AbstractController
 {
-    #[Route('/', name: 'app_activity_index', methods: ['GET'])]
-    public function index(ActivityRepository $activityRepository): Response
-    {
-        return $this->render('activity/index.html.twig', [
-            'activities' => $activityRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_activity_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ActivityRepository $activityRepository): Response
-    {
-        $activity = new Activity();
-        $form = $this->createForm(ActivityType::class, $activity);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $activityRepository->add($activity, true);
-
-            return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('activity/new.html.twig', [
-            'activity' => $activity,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_activity_show', methods: ['GET'])]
-    public function show(Activity $activity): Response
-    {
-        return $this->render('activity/show.html.twig', [
-            'activity' => $activity,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_activity_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Activity $activity, ActivityRepository $activityRepository): Response
-    {
-        $form = $this->createForm(ActivityType::class, $activity);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $activityRepository->add($activity, true);
-
-            return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('activity/edit.html.twig', [
-            'activity' => $activity,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_activity_delete', methods: ['POST'])]
-    public function delete(Request $request, Activity $activity, ActivityRepository $activityRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$activity->getId(), $request->request->get('_token'))) {
-            $activityRepository->remove($activity, true);
-        }
-
-        return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-
     #[Route('/prepare', name: 'prepare', methods: ['POST'])]
-    public function suggestActivity(Request $request, ActivityRepository $activityRepository, FeaturesValueRepository $featuresValueRepository): Response
+    public function suggestActivity(Request $request, ActivityRepository $activityRepository, FeaturesValueRepository $featuresValueRepository): array
     {
         $inputs = $request->toArray();
-        dd($inputs);
+        
         $activities = $featuresValueRepository->findBy(["id"=>$inputs]);
         //$activitySuggest = $activityRepository->findSuggest($inputs);
         foreach ($activities as $activity) {
             dump($activity);
         }
-        dd($activities);
-
-        $allActivities = $activityRepository->findAll();
+        
+        $allActivities = $activityRepository->findSuggest($activities);
+        return $allActivities;
         //findSuggest($request);
 
         //return ;
@@ -109,6 +45,9 @@ class ActivityController extends AbstractController
         foreach ($reviews as $review) {
             $total += $review->getRate();
             $count++;
+        }
+        if($count == 0) {
+            return new JsonResponse(['error' => 'No rates found for this activity'],200);
         }
         $average = $total/$count;
         return new JsonResponse(['average' => $average],200);
