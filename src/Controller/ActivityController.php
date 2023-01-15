@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/activity')]
 class ActivityController extends AbstractController
 {
-    #[Route('/prepare', name: 'prepare', methods: ['POST', 'GET'])]
+    #[Route('/prepare', name: 'prepare', methods: ['POST'])]
     public function suggestActivity(Request $request, ActivityRepository $activityRepository, FeaturesValueRepository $featuresValueRepository): array
     {
         $inputs = $request->toArray();
@@ -50,6 +50,13 @@ class ActivityController extends AbstractController
         }
         $average = $total/$count;
         return new JsonResponse(['average' => $average],200);
+    }
+
+    #[Route('/latest', name: 'latest', methods: ['GET'])]
+    public function latest(ActivityRepository $repository): JsonResponse
+    {
+        $activities = $repository->findLatest();
+        return $this->json($activities);
     }
 
 }

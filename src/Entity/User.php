@@ -34,7 +34,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
         'put',
         'delete',
         'get',
-        // recup id user
     ],
     normalizationContext: ['groups' => 'user:read'],
     denormalizationContext: ['groups' => 'user:write']

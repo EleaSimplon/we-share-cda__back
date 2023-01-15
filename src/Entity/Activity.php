@@ -17,17 +17,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
     collectionOperations: [
         'get'=>[
             'normalization_context'=> ['groups'=>['read:activities:collection']]
-            
         ],
-        'prepare' => [
-            'method' => 'GET',
-            'path' => '/prepare',
-            'controller' => [ActivityController::class, 'suggestActivity'],
-        ],
+        // 'prepare' => [
+        //     'method' => 'GET',
+        //     'path' => '/prepare',
+        //     'controller' => [ActivityController::class, 'suggestActivity'],
+        // ],
         'average'=> [
             'method' => 'GET',
             'path'=> '/activities/{id}/average',
             'controller' => [ActivityController::class, 'averageRate'],
+        ],
+        'latest'=> [
+            'method' => 'GET',
+            'path'=> '/activities/latest',
+            'controller' => [ActivityController::class, 'latest'],
         ],
         // Pour la doc API
         'post'=>[

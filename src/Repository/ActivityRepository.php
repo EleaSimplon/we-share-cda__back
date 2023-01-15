@@ -71,22 +71,24 @@ class ActivityRepository extends ServiceEntityRepository
        return $this->createQueryBuilder('a')
             ->join('a.features', 'features')
             ->join('features.features_value', 'featuresValue')
-           ->andWhere('featuresValue IN (:val)')
-           ->groupBy('a')
-           ->setParameter('val', $value)
-           ->setMaxResults(10)
-           ->getQuery()
-           ->getResult()
+            ->andWhere('featuresValue IN (:val)')
+            ->groupBy('a')
+            ->setParameter('val', $value)
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult()
        ;
-        // $query = $this->createQuery('SELECT a
-        //                             FROM Activity a
-        //                             JOIN a.features f
-        //                             JOIN f.featuresValue fv
-        //                             WHERE fv.id IN (2,3)
-        //                             GROUP BY a.id
-        //                         ');
-        // return $activities = $query->getResult();
+       
+    }
 
+    public function findLatest(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.published_at', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult()
+        ;
 
     }
 
