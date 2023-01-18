@@ -22,12 +22,11 @@ class ActivityController extends AbstractController
     public function suggestActivity(Request $request, ActivityRepository $activityRepository, FeaturesValueRepository $featuresValueRepository): array
     {
         $inputs = $request->toArray();
-        
         $activities = $featuresValueRepository->findBy(["id"=>$inputs]);
         
-        foreach ($activities as $activity) {
-            dump($activity);
-        }
+        // foreach ($activities as $activity) {
+        //     //dump($activity);
+        // }
         
         $allActivities = $activityRepository->findSuggest($activities);
 

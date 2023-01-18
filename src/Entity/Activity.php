@@ -11,6 +11,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ActivityController;
 use App\Controller\ActivityImageController;
 use Symfony\Component\Serializer\Annotation\Groups;
+use DateTime;
 
 #[ApiResource(
 
@@ -148,6 +149,7 @@ class Activity
     {
         $this->reviews = new ArrayCollection();
         $this->features = new ArrayCollection();
+        $this->published_at = new DateTime();
     }
 
     public function getId(): ?int
