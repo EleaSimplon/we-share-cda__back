@@ -19,11 +19,6 @@ use DateTime;
         'get'=>[
             'normalization_context'=> ['groups'=>['read:activities:collection']]
         ],
-        // 'prepare' => [
-        //     'method' => 'GET',
-        //     'path' => '/prepare',
-        //     'controller' => [ActivityController::class, 'suggestActivity'],
-        // ],
         'average'=> [
             'method' => 'GET',
             'path'=> '/activities/{id}/average',
@@ -36,20 +31,15 @@ use DateTime;
         ],
         // Pour la doc API
         'post'=>[
-            'denormalization_context'=> ['groups'=>['activity:write']]
+            'denormalization_context'=> [
+                'groups'=>['activity:write'],
+            ]
         ],
-        // 'prepare'
-        /*  method post,
-            utiliser un controller
-            recuperer dans la requete les ids
-            Créer une methode dans le activityRepository qui recupere les activities
-            renvoyer les activities
-        */
         'prepare' => [
             'method' => 'POST',
             'path' => '/prepare',
             'controller' => [ActivityController::class, 'suggestActivity'],
-        ]
+        ],
     ],
     itemOperations: [
         'put',
@@ -59,7 +49,7 @@ use DateTime;
             'method' => 'POST',
             'path' => '/activities/{id}/image',
             'deserialize' => false,
-            'validate'=>false,
+            'validate' => false,
             'controller' => ActivityImageController::class
         ]
     ],
@@ -72,7 +62,7 @@ class Activity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'activity:read', 'review:write', 'read:activities:collection'])]
+    #[Groups(['user:read', 'activity:read', 'review:write', 'read:activities:collection', 'favorite:write'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -144,12 +134,17 @@ class Activity
     #[ORM\OneToMany(mappedBy: 'activity', targetEntity: Features::class)]
     #[Groups(['activity:write', 'activity:read',  'read:activities:collection'])]
     private Collection $features;
+
+    #[ORM\ManyToMany(targetEntity: Favorite::class, mappedBy: 'activity')]
+    #[Groups(['user:write', 'activity:read'])]
+    private Collection $favorites;
     
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
         $this->features = new ArrayCollection();
         $this->published_at = new DateTime();
+        $this->favorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -402,6 +397,33 @@ class Activity
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Favorite>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): self
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->addActivity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): self
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            $favorite->removeActivity($this);
+        }
+
+        return $this;
     }
 
 }

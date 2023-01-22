@@ -3,16 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Activity;
-//use App\Entity\FeaturesValue;
-//use App\Form\ActivityType;
 use App\Repository\ActivityRepository;
-//use App\Repository\FeaturesRepository;
 use App\Repository\FeaturesValueRepository;
-//use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-//use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/activity')]
@@ -23,10 +18,6 @@ class ActivityController extends AbstractController
     {
         $inputs = $request->toArray();
         $activities = $featuresValueRepository->findBy(["id"=>$inputs]);
-        
-        // foreach ($activities as $activity) {
-        //     //dump($activity);
-        // }
         
         $allActivities = $activityRepository->findSuggest($activities);
 

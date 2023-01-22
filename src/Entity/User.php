@@ -45,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'review:write', 'activity:write'])]
+    #[Groups(['user:read', 'review:write', 'activity:write', 'favorite:write'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -86,11 +86,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Review::class, orphanRemoval: true)]
     #[Groups(['user:read'])]
     private Collection $reviews;
+
+    #[ORM\ManyToMany(targetEntity: Favorite::class, mappedBy: 'user')]
+    #[Groups(['user:read'])]
+    private Collection $favorites;
     
     public function __construct()
     {
         $this->activities = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -275,5 +280,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Collection<int, Favorite>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): self
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): self
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            $favorite->removeUser($this);
+        }
+
+        return $this;
     }
 }
