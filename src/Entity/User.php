@@ -45,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'review:write', 'activity:write', 'favorite:write'])]
+    #[Groups(['user:read', 'review:write', 'activity:write', 'activity:read', 'favorite:write'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
