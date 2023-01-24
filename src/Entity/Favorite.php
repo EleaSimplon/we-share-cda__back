@@ -23,7 +23,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'put',
         'delete',
         'get',
-        'patch'
         
     ],
     normalizationContext: ['groups' => 'favorite:read'],
