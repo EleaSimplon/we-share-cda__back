@@ -41,9 +41,6 @@ class ActivityCrudController extends AbstractCrudController
             TextField::new('company'),
             TextField::new('address'),
             TelephoneField::new('phone_number'),
-            ImageField::new('schedule')
-                ->setBasePath(self::SCHEDULE_BASE_PATH)
-                ->setUploadDir(self::SCHEDULE_UPLOAD_DIR),
             IntegerField::new('duration'),
             AssociationField::new('unit'),
             TextField::new('city'),
@@ -55,7 +52,6 @@ class ActivityCrudController extends AbstractCrudController
                 ->setUploadDir(self::ACTIVITY_UPLOAD_DIR),
             MoneyField::new('price')->setCurrency('USD'),
             TextareaField::new('description'),
-            TextField::new('short_description')
         ];
     }
 

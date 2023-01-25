@@ -77,10 +77,6 @@ class Activity
     #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $phone_number = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
-    private ?string $schedule = null;
-
     #[ORM\Column]
     #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?int $duration = null;
@@ -117,10 +113,6 @@ class Activity
     #[ORM\Column(length: 700)]
     #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
     private ?string $description = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user:read', 'activity:write', 'activity:read', 'read:activities:collection'])]
-    private ?string $short_description = null;
 
     #[ORM\ManyToOne(inversedBy: 'activities')]
     #[ORM\JoinColumn(nullable: false)]
@@ -184,18 +176,6 @@ class Activity
     public function setPhoneNumber(?string $phone_number): self
     {
         $this->phone_number = $phone_number;
-
-        return $this;
-    }
-
-    public function getSchedule(): ?string
-    {
-        return $this->schedule;
-    }
-
-    public function setSchedule(?string $schedule): self
-    {
-        $this->schedule = $schedule;
 
         return $this;
     }
@@ -305,18 +285,6 @@ class Activity
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getShortDescription(): ?string
-    {
-        return $this->short_description;
-    }
-
-    public function setShortDescription(?string $short_description): self
-    {
-        $this->short_description = $short_description;
 
         return $this;
     }
