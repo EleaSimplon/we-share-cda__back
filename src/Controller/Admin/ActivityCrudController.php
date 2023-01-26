@@ -38,20 +38,21 @@ class ActivityCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             /* Recup id User connected */
             AssociationField::new('user'),
-            TextField::new('company'),
-            TextField::new('address'),
-            TelephoneField::new('phone_number'),
+            TextField::new('name'),
+            TextareaField::new('description'),
+            ImageField::new('picture')
+            ->setBasePath(self::ACTIVITY_BASE_PATH)
+            ->setUploadDir(self::ACTIVITY_UPLOAD_DIR),
             IntegerField::new('duration'),
             AssociationField::new('unit'),
-            TextField::new('city'),
-            TextField::new('name'),
-            TextField::new('country'),
-            DateTimeField::new('published_at')->hideOnForm(),
-            ImageField::new('picture')
-                ->setBasePath(self::ACTIVITY_BASE_PATH)
-                ->setUploadDir(self::ACTIVITY_UPLOAD_DIR),
             MoneyField::new('price')->setCurrency('USD'),
-            TextareaField::new('description'),
+            TextField::new('company'),
+            TextField::new('address'),
+            TextField::new('city'),
+            TextField::new('country'),
+            TelephoneField::new('phone_number'),
+            DateTimeField::new('published_at')->hideOnForm(),
+            
         ];
     }
 
