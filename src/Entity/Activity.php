@@ -31,9 +31,11 @@ use DateTime;
         ],
         // Pour la doc API
         'post'=>[
-            'denormalization_context'=> [
-                'groups'=>['activity:write'],
-            ]
+            'method' => 'POST',
+            'path' => '/activities',
+            'deserialize' => false,
+            'validate' => false,
+            'controller' => ActivityImageController::class
         ],
         'prepare' => [
             'method' => 'POST',
@@ -45,13 +47,13 @@ use DateTime;
         'put',
         'delete',
         'get',
-        'image' => [
-            'method' => 'POST',
-            'path' => '/activities/{id}/image',
-            'deserialize' => false,
-            'validate' => false,
-            'controller' => ActivityImageController::class
-        ]
+        // 'image' => [
+        //     'method' => 'POST',
+        //     'path' => '/activities/{id}/image',
+        //     'deserialize' => false,
+        //     'validate' => false,
+        //     'controller' => ActivityImageController::class
+        // ]
     ],
 
     normalizationContext: ['groups' => 'activity:read'],
@@ -394,4 +396,15 @@ class Activity
         return $this;
     }
 
+
+    public function hydrate(array $data){
+        foreach ($data as $key => $value) {
+            $method = "set".ucfirst($key);
+            if ($key == "unit" || $key == "user") {
+                # code...
+            }else if (method_exists($this, $method )) {
+                $this->$method($value);
+            }
+        }
+    }
 }
