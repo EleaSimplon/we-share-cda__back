@@ -396,7 +396,7 @@ class Activity
         return $this;
     }
 
-
+    // Upload image when adding an activity
     public function hydrate(array $data){
         foreach ($data as $key => $value) {
             $method = "set".ucfirst($key);
